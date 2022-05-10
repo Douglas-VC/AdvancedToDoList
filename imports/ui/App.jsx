@@ -4,20 +4,18 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { LoginForm } from './LoginForm';
 import { Welcome } from './Welcome';
 import { Tasks } from './Tasks';
-import { Route, Routes, Navigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
+  const navigate = useNavigate();
 
-  function RequireAuth({ children }) {
+  const RequireAuth = ({ children }) => {
     console.log(user);
-    // if (!user) {
-    //   return <Navigate to="/" replace={false} />;
-    // }
-  
-    // return children;
+
     return !user ? (
-      <Navigate to="/" replace={true} />
+      console.log("You need to log in!"),
+      navigate('/')
     ) : (
       children
     );
@@ -28,14 +26,21 @@ export const App = () => {
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route 
-          path="/welcome" 
+          path="/welcome"
           element={
             <RequireAuth>
               <Welcome />
             </RequireAuth>
           }
         />
-        <Route path="/tasks" element={<Tasks />} />
+        <Route
+          path="/tasks"
+          element={
+            <RequireAuth>
+              <Tasks />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </div>
   );

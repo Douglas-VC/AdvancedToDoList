@@ -52,3 +52,18 @@ body {
   margin-top: 16px;
   width: 150px;
 }
+
+.welcome-button > button {
+  margin-top: 16px;
+  width: 150px;
+  height: 150px;
+  font-weight: bold;
+  font-size: large;
+}
+
+.tasks-button > button {
+  margin-top: 16px;
+  width: 150px;
+  font-weight: bold;
+  font-size: large;
+}
