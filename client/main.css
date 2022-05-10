@@ -1,0 +1,54 @@
+body {
+  padding: 10px;
+  font-family: sans-serif;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: auto;
+  background: white;
+}
+
+.app-title {
+  font-size: small;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form > div {
+  margin: 8px;
+}
+
+.login-form > div > label {
+  font-weight: bold;
+}
+
+.login-form > div  > input {
+  flex-grow: 1;
+  box-sizing: border-box;
+  padding: 10px 6px;
+  background: transparent;
+  border: 1px solid #aaa;
+  width: 100%;
+  font-size: 1em;
+  margin-right: 16px;
+  margin-top: 4px;
+}
+
+.login-form > div > input:focus {
+  outline: 0;
+}
+
+.login-form > div > button {
+  margin-top: 16px;
+  width: 150px;
+}
