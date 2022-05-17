@@ -4,6 +4,7 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { LoginForm } from './LoginForm';
 import { Welcome } from './Welcome';
 import { Tasks } from './Tasks';
+import { NewTask } from './NewTask';
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 export const App = () => {
@@ -22,7 +23,7 @@ export const App = () => {
   }
 
   return (
-    <div>
+    <div className="main">
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route 
@@ -38,6 +39,14 @@ export const App = () => {
           element={
             <RequireAuth>
               <Tasks />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/newtask"
+          element={
+            <RequireAuth>
+              <NewTask />
             </RequireAuth>
           }
         />

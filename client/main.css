@@ -11,7 +11,7 @@ body {
   background: white;
 }
 
-.app-title {
+.login-title {
   font-size: small;
 }
 
@@ -53,6 +53,19 @@ body {
   width: 150px;
 }
 
+.welcome-page {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-title {
+  font-size: small;
+  margin-top:50px;
+}
+
 .welcome-button > button {
   margin-top: 16px;
   width: 150px;
@@ -61,9 +74,78 @@ body {
   font-size: large;
 }
 
-.tasks-button > button {
-  margin-top: 16px;
+.user-logout {
+  display: flex;
+
+  align-self: flex-end;
+
+  margin: 8px 16px 0;
+  font-weight: bold;
+}
+
+.tasks-page {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.tasks-title {
+  font-size: small;
+  margin-top:50px;
+}
+
+.tasks-back-button > button {
   width: 150px;
   font-weight: bold;
   font-size: large;
+  position:fixed;
+  bottom: 40px;
+  left: 40px;
+}
+
+.tasks-newtask-button > button {
+  font-weight: bold;
+  font-size: large;
+}
+
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.task-icon {
+  transform: scale(1.6);
+}
+
+.new-task-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  justify-content: center;
+  align-items: center;
+}
+
+.new-task-title {
+  font-size: small;
+  margin-top:50px;
+  margin-bottom:25px;
+}
+
+.new-task-buttons {
+  display: flex;
+  position: absolute;
+  bottom: 40px;
+  justify-content: space-around;
+}
+
+.new-task-button > button {
+  margin: 50px;  
+  font-weight: bold;
+  font-size: large; 
 }

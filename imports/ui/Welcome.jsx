@@ -1,5 +1,4 @@
 import { Meteor } from 'meteor/meteor';
-import { useTracker } from 'meteor/react-meteor-data';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -30,14 +29,14 @@ export const Welcome = () => {
   }
 
   return (
-    <div className="app-bar">
-      <div className="app-header">
+    <div className="welcome-page">
+      <div className="welcome-title">
         <h1>
-          📝️ Welcome
+          Olá {Meteor.user().username}, bem vindo ao Advanced ToDo List
         </h1>
       </div>
       <div className="user-logout" onClick={userLogout}>
-          Logout 🚪
+        Logout ({Meteor.user().username}) 🚪
       </div>
       <div className="welcome-button">
         <ThemeProvider theme={buttonTheme}>

@@ -35,7 +35,7 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={submit} className="login-form">
-      <div  className="app-title">
+      <div  className="login-title">
         <h1>Bem vindo ao ToDo List</h1>
       </div>
 
