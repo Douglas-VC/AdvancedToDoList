@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const buttonTheme = createTheme({
   palette: {
@@ -40,28 +41,28 @@ export const LoginForm = () => {
       </div>
 
       <div>
-        <input
-          type="text"
-          placeholder="Username"
-          name="username"
+        <TextField
           required
-          onChange={(e) => setUsername(e.target.value)}
-        />
+          type="text"
+          variant="outlined"
+          label="Username"
+          onChange={(e) => setUsername(e.target.value)}>
+        </TextField>
       </div>
 
       <div>
-        <input
-          type="password"
-          placeholder="Password"
-          name="password"
+        <TextField
           required
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          type="password"
+          variant="outlined"
+          label="Password"
+          onChange={(e) => setPassword(e.target.value)}>
+        </TextField>
       </div>
 
       <div>
         <ThemeProvider theme={buttonTheme}>
-          <Button 
+          <Button
             type="submit"
             variant="contained"
             color="primary">

@@ -5,6 +5,7 @@ import { LoginForm } from './LoginForm';
 import { Welcome } from './Welcome';
 import { Tasks } from './Tasks';
 import { NewTask } from './NewTask';
+import { EditTask } from './EditTask';
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 export const App = () => {
@@ -26,7 +27,7 @@ export const App = () => {
     <div className="main">
       <Routes>
         <Route path="/" element={<LoginForm />} />
-        <Route 
+        <Route
           path="/welcome"
           element={
             <RequireAuth>
@@ -47,6 +48,14 @@ export const App = () => {
           element={
             <RequireAuth>
               <NewTask />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/edittask"
+          element={
+            <RequireAuth>
+              <EditTask />
             </RequireAuth>
           }
         />

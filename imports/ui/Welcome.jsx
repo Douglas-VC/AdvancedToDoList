@@ -21,7 +21,7 @@ export const Welcome = () => {
     console.log("logging out");
     logout();
     while(Meteor.loggingOut === true) {}
-    navigate('/');                
+    navigate('/');
   }
 
   const tasksPage = () => {

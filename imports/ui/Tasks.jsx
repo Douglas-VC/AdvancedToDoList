@@ -31,6 +31,10 @@ export const Tasks = () => {
     navigate('/newtask');
   }
 
+  const editTask = (task) => {
+    navigate('/edittask', { state: { task: task } });
+  }
+
   return (
     <div className="tasks-page">
       <div className="tasks-title">
@@ -40,13 +44,14 @@ export const Tasks = () => {
       </div>
 
       <div className='tasks-list'>
-        <Box sx={{ flexGrow: 1, minWidth:320}}>
-          <List>
+        <Box sx={{ flexGrow: 1, minWidth:320 }}>
+          <List style={{ maxHeight: 400, overflow: 'auto' }}>
             {tasks.map(task => (
               <Task
                 key={task._id}
                 task={task}
                 onDeleteClick={deleteTask}
+                onEditClick={editTask}
               />
             ))}
           </List>
@@ -63,8 +68,8 @@ export const Tasks = () => {
           +
           </Button>
         </ThemeProvider>
-      </div>                    
-      
+      </div>
+
       <div className="tasks-back-button">
         <ThemeProvider theme={buttonTheme}>
           <Button

@@ -2,9 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { TasksCollection } from '/imports/db/TasksCollection';
 
-const insertTask = (taskText, user) =>
+const insertTask = (taskName, taskDescription, user) =>
   TasksCollection.insert({
-    text: taskText,
+    name: taskName,
+    description: taskDescription,
+    date: new Date(),
+    situation: 'Cadastrada',
     userId: user._id,
     userName: user.username,
     createdAt: new Date(),
@@ -24,12 +27,14 @@ Meteor.startup(() => {
   const user = Accounts.findUserByUsername(SEED_USERNAME);
 
   if (TasksCollection.find().count() === 0) {
-    [
-      'First Task',
-      'Second Task',
-      'Third Task',
-      'Fourth Task',
-      'Fifth Task',
-    ].forEach(taskText => insertTask(taskText, user));
+    const taskInformation = [
+      ['Primeira Tarefa','Descrição Tarefa 1'],
+      ['Segunda Tarefa','Descrição Tarefa 2'],
+      ['Terceira Tarefa','Descrição Tarefa 3'],
+      ['Quarta Tarefa','Descrição Tarefa 4']
+    ];
+    for (let i = 0; i < taskInformation.length; i++) {
+      insertTask(taskInformation[i][0], taskInformation[i][1], user);
+    }
   }
 });
