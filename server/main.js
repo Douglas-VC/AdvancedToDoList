@@ -13,6 +13,12 @@ const insertTask = (taskName, taskDescription, user) =>
     createdAt: new Date(),
 });
 
+Meteor.methods({
+  doesUserExist(name) {
+    return Accounts.findUserByUsername(name) != null;
+  }
+});
+
 const SEED_USERNAME = 'testuser';
 const SEED_PASSWORD = 'pass1523462652';
 

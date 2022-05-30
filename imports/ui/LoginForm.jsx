@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
 
 const buttonTheme = createTheme({
   palette: {
@@ -28,11 +29,14 @@ export const LoginForm = () => {
           console.log("User logged in: " + Meteor.user().username);
           navigate('/welcome');
       } else{
-          // Do something on error...
-          console.log("Not logged in, and error occurred:", err);  // Outputs error
+          console.log("Not logged in, and error occurred:", err);
       }
     });
   };
+
+  const signupPage = () => {
+    navigate('/signup');
+  }
 
   return (
     <form onSubmit={submit} className="login-form">
@@ -45,7 +49,7 @@ export const LoginForm = () => {
           required
           type="text"
           variant="outlined"
-          label="Username"
+          label="Usuário"
           onChange={(e) => setUsername(e.target.value)}>
         </TextField>
       </div>
@@ -55,7 +59,7 @@ export const LoginForm = () => {
           required
           type="password"
           variant="outlined"
-          label="Password"
+          label="Senha"
           onChange={(e) => setPassword(e.target.value)}>
         </TextField>
       </div>
@@ -70,6 +74,17 @@ export const LoginForm = () => {
           </Button>
         </ThemeProvider>
       </div>
+
+
+      <ThemeProvider theme={buttonTheme}>
+        <Link
+          type="button"
+          variant="subtitle1"
+          onClick={signupPage}>
+          Cadastrar
+        </Link>
+      </ThemeProvider>
+
     </form>
   );
 };
