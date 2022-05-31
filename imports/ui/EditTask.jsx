@@ -1,25 +1,18 @@
 import { Meteor } from 'meteor/meteor';
-import React, { useState, useEffect } from 'react';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Box from '@material-ui/core/Box';
-import { TasksCollection } from '/imports/db/TasksCollection';
 import { useTracker } from 'meteor/react-meteor-data';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { DateTimePicker } from '@material-ui/pickers';
-
-const buttonTheme = createTheme({
-  palette: {
-    primary: {
-      main: grey[500],
-    },
-  },
-});
+import { TasksCollection } from '/imports/db/TasksCollection';
+import { ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { buttonTheme } from './Welcome';
 
 export const EditTask = () => {
   const navigate = useNavigate();
@@ -31,10 +24,12 @@ export const EditTask = () => {
   const [taskName, setTaskName] = useState(task.name);
   const [taskDescription, setTaskDescription] = useState(task.description);
   const [selectedDate, handleDateChange] = useState(task.date);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showErrorMessage, setShowErrorMessage] = useState(null);
 
   const [disabledRegisteredButton, setDisabledRegisteredButton] = useState( (task.situation === "Cadastrada") ? true : false );
   const [disabledOngoingButton, setDisabledOngoingButton] = useState( (task.situation === "Em Andamento") ? true : false );
-  const [disabledConcludedButton, setDisabledConcludedButton] = useState( (task.situation === "Cadastrada" || task.situation === "Concluida") ? true : false );
+  const [disabledConcludedButton, setDisabledConcludedButton] = useState( (task.situation === "Cadastrada" || task.situation === "Concluída") ? true : false );
 
   const tasksPage = () => {
     navigate('/tasks');
@@ -63,6 +58,15 @@ export const EditTask = () => {
     setTaskDescription(task.description);
 
     setDisabledState(true);
+  };
+
+  const handleEdit = () => {
+    if (task.userName === Meteor.user().username) {
+      setDisabledState(false);
+    } else {
+      setErrorMessage("Apenas o usuário que criou a tarefa pode modificá-la");
+      setShowErrorMessage(true);
+    }
   };
 
   const handleRegisteredClick = () => {
@@ -96,186 +100,255 @@ export const EditTask = () => {
   };
 
   return (
-    <div className="edit-task-page">
-      <div className="edit-task-title">
-        <h1>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+
+      <Typography
+        variant="h4"
+        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
         {disabledState ? 'Visualizar' : 'Editar'}: {task.name}
-        </h1>
-      </div>
+      </Typography>
 
-      <div>
-        <Box sx={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-          <Typography
-            style = {{
-              width: 140,
-              textAlign: "right"}}>
-            Nome da Tarefa:
-          </Typography>
-          <TextField
-            required
+      <Snackbar
+        open={showErrorMessage}
+        onClose={() => setShowErrorMessage(null)}
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical:"top", horizontal:"center"}}>
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+        <Typography
+          sx = {{
+            width: 140,
+            textAlign: "right" }}>
+          Nome da Tarefa:
+        </Typography>
+
+        <TextField
+          required
+          disabled={disabledState}
+          variant="outlined"
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+          sx = {{
+            width: 400,
+            marginLeft: 1,
+            marginRight: 18,
+            backgroundColor: disabledState ? '#bdbdbd' : 'white',
+            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
+          }}>
+        </TextField>
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+        <Typography
+          sx = {{
+            width: 140,
+            textAlign: "right" }}>
+          Descrição:
+        </Typography>
+
+        <TextField
+          required
+          multiline
+          maxRows={3}
+          disabled={disabledState}
+          variant="outlined"
+          value={taskDescription}
+          onChange={(e) => setTaskDescription(e.target.value)}
+          sx = {{
+            width: 400,
+            marginLeft: 1,
+            marginRight: 18,
+            backgroundColor: disabledState ? '#bdbdbd' : 'white',
+            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
+          }}>
+        </TextField>
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
+        <Typography
+          sx = {{
+            width: 140,
+            textAlign: "right" }}>
+          Data:
+        </Typography>
+
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DateTimePicker
+            renderInput={(props) =>
+              <TextField {...props}
+              sx = {{
+                width: 400,
+                marginLeft: 1,
+                marginRight: 18,
+                backgroundColor: disabledState ? '#bdbdbd' : 'white',
+                "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
+              }}
+              required/>
+            }
+            value={selectedDate}
             disabled={disabledState}
-            variant="outlined"
-            value={taskName}
-            onChange={(e) => setTaskName(e.target.value)}
-            style = {{
-              width: 400,
-              marginLeft: 12,
-              marginRight: 140,
-              backgroundColor: disabledState ? '#bdbdbd' : 'white',
-              WebkitTextFillColor: 'black'}}>
-          </TextField>
-        </Box>
+            format="dd/MM/yyyy hh:mm a"
+            onChange={handleDateChange}
+          />
+        </LocalizationProvider>
+      </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
-          <Typography
-            style = {{ width: 140, textAlign: "right" }}>
-            Descrição:
-          </Typography>
-          <TextField
-            required
-            multiline
-            maxRows={3}
-            disabled={disabledState}
-            variant="outlined"
-            value={taskDescription}
-            onChange={(e) => setTaskDescription(e.target.value)}
-            style = {{
-              width: 400,
-              marginLeft: 12,
-              marginRight: 140,
-              backgroundColor: disabledState ? '#bdbdbd' : 'white',
-              WebkitTextFillColor: 'black'}}>
-          </TextField>
-        </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
-          <Typography
-            style = {{ width: 140, textAlign: "right" }}>
-            Data:
-          </Typography>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <ThemeProvider theme={buttonTheme}>
-              <DateTimePicker
-                required
-                disabled={disabledState}
-                value={selectedDate}
-                inputVariant="outlined"
-                onChange={handleDateChange}
-                format="dd/MM/yyyy hh:mm a"
-                style = {{
-                  width: 400,
-                  marginLeft: 12,
-                  marginRight: 140,
-                  backgroundColor: disabledState ? '#bdbdbd' : 'white',
-                  WebkitTextFillColor: 'black'}}
-              />
-            </ThemeProvider>
-          </MuiPickersUtilsProvider>
-        </Box>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
+        <Typography
+          sx = {{
+            width: 140,
+            textAlign: "right" }}>
+          Criador:
+        </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
-          <Typography
-            style = {{ width: 140, textAlign: "right" }}>
-            Criador:
-          </Typography>
-          <TextField
-            disabled
-            variant="outlined"
-            value={task.userName}
-            style = {{
-              width: 400,
-              marginLeft: 12,
-              marginRight: 140,
-              backgroundColor: '#bdbdbd',
-              WebkitTextFillColor: 'black'}}>
-          </TextField>
-        </Box>
+        <TextField
+          disabled
+          variant="outlined"
+          value={task.userName}
+          sx = {{
+            width: 400,
+            marginLeft: 1,
+            marginRight: 18,
+            backgroundColor: '#bdbdbd',
+            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
+          }}>
+        </TextField>
+      </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
-          <Typography
-            style = {{ width: 140, textAlign: "right" }}>
-            Situação:
-          </Typography>
-          <TextField
-            disabled
-            variant="outlined"
-            value={task.situation}
-            style = {{
-              width: 400,
-              marginLeft: 12,
-              marginRight: 140,
-              backgroundColor: '#bdbdbd',
-              WebkitTextFillColor: 'black'}}>
-          </TextField>
-        </Box>
-      </div>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
+        <Typography
+          style = {{ width: 140, textAlign: "right" }}>
+          Situação:
+        </Typography>
 
-      <div className="task-situation-buttons">
-        <div className="task-situation-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+        <TextField
+          disabled
+          variant="outlined"
+          value={task.situation}
+          sx = {{
+            width: 400,
+            marginLeft: 1,
+            marginRight: 18,
+            backgroundColor: '#bdbdbd',
+            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
+          }}>
+        </TextField>
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          position: "absolute",
+          bottom: 110,
+          justifyContent: "space-around"
+        }}>
+
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            type="button"
             variant="contained"
             disabled={disabledRegisteredButton}
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "normal",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
             onClick={handleRegisteredClick}>
             Cadastrada
-            </Button>
-          </ThemeProvider>
-        </div>
+          </Button>
+        </ThemeProvider>
 
-        <div className="task-situation-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            type="button"
             variant="contained"
             disabled={disabledOngoingButton}
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "normal",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
             onClick={handleOngoingClick}>
             Em Andamento
-            </Button>
-          </ThemeProvider>
-        </div>
+          </Button>
+        </ThemeProvider>
 
-        <div className="task-situation-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            type="button"
             variant="contained"
             disabled={disabledConcludedButton}
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "normal",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
             onClick={handleConcludedClick}>
             Concluída
-            </Button>
-          </ThemeProvider>
-        </div>
-      </div>
+          </Button>
+        </ThemeProvider>
+      </Box>
 
-      <div className="edit-task-buttons">
-        <div className="edit-task-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+      <Box
+        sx={{
+          display: "flex",
+          position: "absolute",
+          bottom: 40,
+          justifyContent: "space-around"
+        }}>
+
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            type="button"
             variant="contained"
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "large",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
             onClick={disabledState ? tasksPage : handleCancel}>
             {disabledState ? 'Voltar' : 'Cancelar'}
-            </Button>
-          </ThemeProvider>
-        </div>
+          </Button>
+        </ThemeProvider>
 
-        <div className="edit-task-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            type="button"
             variant="contained"
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "large",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
-            onClick={disabledState ? () => setDisabledState(false) : handleSave}>
+            onClick={disabledState ? handleEdit : handleSave}>
             {disabledState ? 'Editar' : 'Salvar'}
-            </Button>
-          </ThemeProvider>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </ThemeProvider>
+      </Box>
+    </Box>
   );
 };

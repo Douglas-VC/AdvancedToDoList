@@ -1,5 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useTracker } from 'meteor/react-meteor-data';
 import { LoginForm } from './LoginForm';
 import { Welcome } from './Welcome';
@@ -7,7 +8,7 @@ import { Tasks } from './Tasks';
 import { NewTask } from './NewTask';
 import { EditTask } from './EditTask';
 import { SignUp } from './SignUp';
-import { Route, Routes, useNavigate } from "react-router-dom";
+import Box from '@mui/material/Box';
 
 export const App = () => {
   const user = useTracker(() => Meteor.user());
@@ -25,10 +26,24 @@ export const App = () => {
   }
 
   return (
-    <div className="main">
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        flex: 1,
+        overflow: "auto",
+        background: "white" }}>
       <Routes>
-        <Route path="/" element={<LoginForm />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route
+          path="/"
+          element={ <LoginForm /> }
+        />
+
+        <Route
+          path="/signup"
+          element={ <SignUp /> }
+        />
+
         <Route
           path="/welcome"
           element={
@@ -37,6 +52,7 @@ export const App = () => {
             </RequireAuth>
           }
         />
+
         <Route
           path="/tasks"
           element={
@@ -45,6 +61,7 @@ export const App = () => {
             </RequireAuth>
           }
         />
+
         <Route
           path="/newtask"
           element={
@@ -53,6 +70,7 @@ export const App = () => {
             </RequireAuth>
           }
         />
+
         <Route
           path="/edittask"
           element={
@@ -62,6 +80,6 @@ export const App = () => {
           }
         />
       </Routes>
-    </div>
+    </Box>
   );
 };

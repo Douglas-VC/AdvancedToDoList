@@ -1,22 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import { useNavigate } from 'react-router-dom';
 import { TasksCollection } from '/imports/db/TasksCollection';
-import { DateTimePicker } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-
-const buttonTheme = createTheme({
-  palette: {
-    primary: {
-      main: grey[500],
-    },
-  },
-});
+import { ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { buttonTheme } from './Welcome';
 
 export const NewTask = () => {
   const navigate = useNavigate();
@@ -47,75 +40,92 @@ export const NewTask = () => {
   };
 
   return (
-    <div className="new-task-page">
-      <div className="new-task-title">
-        <h1>
-          Criar Nova Tarefa
-        </h1>
-      </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
 
-      <div>
-        <TextField
-          required
-          variant="outlined"
-          label="Nome da Tarefa"
-          onChange={(e) => setTaskName(e.target.value)}
-          style = {{width: 400, marginBottom: '15px'}}>
-        </TextField>
-      </div>
+      <Typography
+        variant="h4"
+        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
+        Criar Nova Tarefa
+      </Typography>
 
-      <div>
-        <TextField
-          required
-          multiline
-          maxRows={3}
-          variant="outlined"
-          label="Descrição"
-          onChange={(e) => setTaskDescription(e.target.value)}
-          style = {{width: 400, marginBottom: '15px'}}>
-        </TextField>
-      </div>
+      <TextField
+        required
+        variant="outlined"
+        label="Nome da Tarefa"
+        onChange={(e) => setTaskName(e.target.value)}
+        style = {{width: 400, marginBottom: '15px'}}>
+      </TextField>
 
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <TextField
+        required
+        multiline
+        maxRows={3}
+        variant="outlined"
+        label="Descrição"
+        onChange={(e) => setTaskDescription(e.target.value)}
+        style = {{width: 400, marginBottom: '15px'}}>
+      </TextField>
+
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DateTimePicker
+          renderInput={(props) =>
+            <TextField {...props}
+            sx = {{width: 400}}
+            required/>
+          }
+          label="Data"
+          value={selectedDate}
+          format="dd/MM/yyyy hh:mm a"
+          onChange={handleDateChange}
+        />
+      </LocalizationProvider>
+
+      <Box
+        sx={{
+          display: "flex",
+          position: "absolute",
+          bottom: 40,
+          justifyContent: "space-around"
+        }}>
+
         <ThemeProvider theme={buttonTheme}>
-          <DateTimePicker
-            required
-            label="Data"
-            value={selectedDate}
-            inputVariant="outlined"
-            onChange={handleDateChange}
-            format="yyyy/MM/dd hh:mm a"
-            style = {{width: 400}}
-          />
-        </ThemeProvider>
-      </MuiPickersUtilsProvider>
-
-      <div className="new-task-buttons">
-        <div className="new-task-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+          <Button
+            type="button"
             variant="contained"
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "large",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
             onClick={tasksPage}>
             Cancelar
-            </Button>
-          </ThemeProvider>
-        </div>
+          </Button>
+        </ThemeProvider>
 
-        <div className="new-task-button">
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-            type="submit"
+        <ThemeProvider theme={buttonTheme}>
+          <Button
+            type="button"
             variant="contained"
+            sx = {{
+              fontWeight: "bold",
+              fontSize: "large",
+              mr: 8,
+              ml: 8
+            }}
             color="primary"
             onClick={handleSubmit}>
-            Criar
-            </Button>
-          </ThemeProvider>
-        </div>
-      </div>
-
-    </div>
+            Cadastrar
+          </Button>
+        </ThemeProvider>
+      </Box>
+    </Box>
   );
 };

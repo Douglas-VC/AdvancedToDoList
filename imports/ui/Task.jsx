@@ -1,38 +1,34 @@
 import React from 'react';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import AssignmentSharpIcon from '@material-ui/icons/AssignmentSharp';
-import DeleteSharpIcon from '@material-ui/icons/DeleteSharp';
-import EditSharpIcon from '@material-ui/icons/EditSharp';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
+import AssignmentSharpIcon from '@mui/icons-material/AssignmentSharp';
+import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
+import EditSharpIcon from '@mui/icons-material/EditSharp';
 
 export const Task = ({ task, onDeleteClick, onEditClick }) => {
   return (
-
     <ListItem>
       <ListItemIcon>
-        <AssignmentSharpIcon className="task-icon"/>
+        <AssignmentSharpIcon
+          sx = {{
+            transform: "scale(1.6)"
+          }}/>
       </ListItemIcon>
       <ListItemText
         primary = {task.name}
         secondary = {task.userName}
       />
       <ListItemSecondaryAction>
-        <IconButton
-          edge='end'
-          onClick={() => onEditClick(task)}>
+        <IconButton edge='end' onClick={() => onEditClick(task)} size="large">
           <EditSharpIcon />
         </IconButton>
-        <IconButton
-          edge='end'
-          onClick={() => onDeleteClick(task)}>
+        <IconButton edge='end' onClick={() => onDeleteClick(task)} size="large">
           <DeleteSharpIcon />
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
-
   );
 };
-

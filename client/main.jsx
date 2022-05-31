@@ -1,15 +1,15 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { App } from '/imports/ui/App';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import { Meteor } from 'meteor/meteor';
+import { App } from '/imports/ui/App';
 
 Meteor.startup(() => {
-  render(
+  const container = document.getElementById('react-target');
+  const root = createRoot(container);
+  root.render(
     <BrowserRouter>
       <App />
-    </BrowserRouter>,
-    document.getElementById('react-target'));
+    </BrowserRouter>
+  )
 });

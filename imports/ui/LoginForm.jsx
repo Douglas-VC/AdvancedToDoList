@@ -1,23 +1,19 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-
-const buttonTheme = createTheme({
-  palette: {
-    primary: {
-      main: grey[900],
-    },
-  },
-});
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { grey } from '@mui/material/colors';
 
 export const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showErrorMessage, setShowErrorMessage] = useState(null);
   const navigate = useNavigate();
 
   const submit = e => {
@@ -29,7 +25,17 @@ export const LoginForm = () => {
           console.log("User logged in: " + Meteor.user().username);
           navigate('/welcome');
       } else{
-          console.log("Not logged in, and error occurred:", err);
+          console.log(err.reason);
+          switch (err.reason) {
+            case 'User not found':
+              setErrorMessage("Usuário não encontrado");
+              setShowErrorMessage(true);
+              break;
+            case 'Incorrect password':
+              setErrorMessage("Senha incorreta");
+              setShowErrorMessage(true);
+              break;
+          }
       }
     });
   };
@@ -40,51 +46,67 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={submit} className="login-form">
-      <div  className="login-title">
-        <h1>Bem vindo ao ToDo List</h1>
-      </div>
+      <Typography
+        variant="h4"
+        sx = {{ fontSize: "1.8rem", margin: 1, fontWeight: "bold"}}>
+        Bem vindo ao ToDo List:
+      </Typography>
 
-      <div>
-        <TextField
-          required
-          type="text"
-          variant="outlined"
-          label="Usuário"
-          onChange={(e) => setUsername(e.target.value)}>
-        </TextField>
-      </div>
+      <Snackbar
+        open={showErrorMessage}
+        onClose={() => setShowErrorMessage(null)}
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical:"top", horizontal:"center"}}>
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
 
-      <div>
-        <TextField
-          required
-          type="password"
-          variant="outlined"
-          label="Senha"
-          onChange={(e) => setPassword(e.target.value)}>
-        </TextField>
-      </div>
+      <TextField
+        required
+        type="text"
+        variant="outlined"
+        label="Usuário"
+        sx = {{ mt: 2 }}
+        onChange={(e) => setUsername(e.target.value)}>
+      </TextField>
 
-      <div>
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary">
-            Entrar
-          </Button>
-        </ThemeProvider>
-      </div>
+      <TextField
+        required
+        type="password"
+        variant="outlined"
+        label="Senha"
+        sx = {{ mt: 2 }}
+        onChange={(e) => setPassword(e.target.value)}>
+      </TextField>
 
+      <Button
+        type="submit"
+        variant="contained"
+        sx = {{
+          backgroundColor: grey[900],
+          "&:hover": { backgroundColor: grey[900] },
+          mt: 3,
+          width: 150 }}
+        color="primary">
+        Entrar
+      </Button>
 
-      <ThemeProvider theme={buttonTheme}>
-        <Link
-          type="button"
-          variant="subtitle1"
-          onClick={signupPage}>
-          Cadastrar
-        </Link>
-      </ThemeProvider>
-
+      <Link
+        type="button"
+        variant="subtitle1"
+        underline="hover"
+        sx = {{
+          color: "black",
+          mt: 1,
+          '&:hover': { cursor: 'pointer' }
+        }}
+        onClick={signupPage}>
+        Cadastrar
+      </Link>
     </form>
   );
 };

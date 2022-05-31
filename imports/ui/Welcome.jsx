@@ -1,14 +1,17 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
-import Button from '@material-ui/core/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import { grey } from '@mui/material/colors';
 
-const buttonTheme = createTheme({
+export const buttonTheme = createTheme({
   palette: {
     primary: {
-      main: grey[500],
+      main: grey[400],
     },
   },
 });
@@ -29,26 +32,55 @@ export const Welcome = () => {
   }
 
   return (
-    <div className="welcome-page">
-      <div className="welcome-title">
-        <h1>
-          Olá {Meteor.user().username}, bem vindo ao Advanced ToDo List
-        </h1>
-      </div>
-      <div className="user-logout" onClick={userLogout}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+
+      <Typography
+        variant="h4"
+        sx = {{ fontSize: "1.6rem", mt: 8, fontWeight: "bold"}}>
+        Olá {Meteor.user().username}, bem vindo ao Advanced ToDo List
+      </Typography>
+
+      <Link
+        type="button"
+        variant="subtitle1"
+        underline="none"
+        sx = {{
+          color: "black",
+          fontWeight: "bold",
+          mt: 1,
+          '&:hover': { cursor: 'pointer' },
+          display: "flex",
+          alignSelf: "flex-end",
+          mr: 1,
+          mt: 2
+        }}
+        onClick={userLogout}>
         Logout ({Meteor.user().username}) 🚪
-      </div>
-      <div className="welcome-button">
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-          type="submit"
+      </Link>
+
+      <ThemeProvider theme={buttonTheme}>
+        <Button
+          type="button"
           variant="contained"
+          sx = {{
+            mt: 4,
+            mb: 1,
+            width: 150,
+            height: 150,
+            fontWeight: "bold",
+            fontSize: "large"
+          }}
           color="primary"
           onClick={tasksPage}>
           Visualizar tarefas
-          </Button>
-        </ThemeProvider>
-      </div>
-    </div>
+        </Button>
+      </ThemeProvider>
+    </Box>
   );
 };
