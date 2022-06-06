@@ -8,6 +8,8 @@ import { Tasks } from './Tasks';
 import { NewTask } from './NewTask';
 import { EditTask } from './EditTask';
 import { SignUp } from './SignUp';
+import { AppDrawer } from './AppDrawer';
+import { UserProfile } from './UserProfile';
 import Box from '@mui/material/Box';
 
 export const App = () => {
@@ -15,13 +17,15 @@ export const App = () => {
   const navigate = useNavigate();
 
   const RequireAuth = ({ children }) => {
-    console.log(user);
 
     return !user ? (
       console.log("You need to log in!"),
       navigate('/')
     ) : (
-      children
+      <>
+        <AppDrawer />
+        {children}
+      </>
     );
   }
 
@@ -76,6 +80,15 @@ export const App = () => {
           element={
             <RequireAuth>
               <EditTask />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/userprofile"
+          element={
+            <RequireAuth>
+              <UserProfile />
             </RequireAuth>
           }
         />

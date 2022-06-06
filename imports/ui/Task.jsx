@@ -13,13 +13,12 @@ export const Task = ({ task, onDeleteClick, onEditClick }) => {
     <ListItem>
       <ListItemIcon>
         <AssignmentSharpIcon
-          sx = {{
-            transform: "scale(1.6)"
-          }}/>
+          sx = {{ transform: "scale(1.6)" }}/>
       </ListItemIcon>
       <ListItemText
         primary = {task.name}
         secondary = {task.userName}
+        sx = {{ mr: "5rem" }}
       />
       <ListItemSecondaryAction>
         <IconButton edge='end' onClick={() => onEditClick(task)} size="large">

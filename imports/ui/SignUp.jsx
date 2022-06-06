@@ -66,7 +66,7 @@ export const SignUp = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
+        sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
         Criar Nova Conta
       </Typography>
 

@@ -10,12 +10,16 @@ import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Snackbar from '@mui/material/Snackbar';
+import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import { buttonTheme } from './Welcome';
 
 export const Tasks = () => {
   const navigate = useNavigate();
+
+  const handler = useTracker(() => Meteor.subscribe('tasks'));
   const tasks = useTracker(() => TasksCollection.find({}).fetch());
+
   const [errorMessage, setErrorMessage] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(null);
 
@@ -33,7 +37,7 @@ export const Tasks = () => {
 
   const deleteTask = ({ _id, userName }) => {
     if (userName === Meteor.user().username) {
-      TasksCollection.remove(_id);
+      Meteor.call('tasks.remove', _id)
     } else {
       setErrorMessage("Apenas o usuário que criou a tarefa pode excluí-la");
       setShowErrorMessage(true);
@@ -51,7 +55,7 @@ export const Tasks = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 8, fontWeight: "bold"}}>
+        sx = {{ fontSize: "1.6rem", mt: 2, fontWeight: "bold"}}>
         Tarefas Cadastradas
       </Typography>
 
@@ -68,17 +72,19 @@ export const Tasks = () => {
         </Alert>
       </Snackbar>
 
-      <Box sx={{ minWidth:320, mt: 1 }}>
-        <List sx={{ maxHeight: 400, overflow: 'auto' }}>
-          {tasks.map(task => (
-            <Task
-              key={task._id}
-              task={task}
-              onDeleteClick={deleteTask}
-              onEditClick={editTask}
-            />
-          ))}
-        </List>
+      <Box sx={{ mt: 1 }}>
+        {!handler.ready() ?
+          <CircularProgress /> :
+          <List sx={{ maxHeight: 400, overflow: 'auto' }}>
+            {tasks.map(task => (
+              <Task
+                key={task._id}
+                task={task}
+                onDeleteClick={deleteTask}
+                onEditClick={editTask}
+              />
+            ))}
+          </List>}
       </Box>
 
       <ThemeProvider theme={buttonTheme}>

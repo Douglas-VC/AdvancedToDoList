@@ -49,7 +49,7 @@ export const LoginForm = () => {
       <Typography
         variant="h4"
         sx = {{ fontSize: "1.8rem", margin: 1, fontWeight: "bold"}}>
-        Bem vindo ao ToDo List:
+        Bem vindo ao ToDo List
       </Typography>
 
       <Snackbar

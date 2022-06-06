@@ -6,25 +6,8 @@ body {
 .login-form {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 90vh;
 
   justify-content: center;
   align-items: center;
-}
-
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  height: 60vh;
-
-  justify-content: center;
-  align-items: center;
-}
-
-.signup-form > div {
-  margin: 8px;
-}
-
-.signup-form > div > label {
-  font-weight: bold;
 }

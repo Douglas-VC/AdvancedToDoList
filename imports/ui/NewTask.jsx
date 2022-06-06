@@ -1,12 +1,15 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TasksCollection } from '/imports/db/TasksCollection';
 import { ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { buttonTheme } from './Welcome';
@@ -16,6 +19,11 @@ export const NewTask = () => {
   const [taskName, setTaskName] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
   const [selectedDate, handleDateChange] = useState(null);
+  const [taskType, setTaskType] = React.useState('');
+
+  const handleTypeChange = (e) => {
+    setTaskType(e.target.value);
+  };
 
   const tasksPage = () => {
     navigate('/tasks');
@@ -24,16 +32,14 @@ export const NewTask = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!taskName || !taskDescription || !selectedDate) return;
+    if (!taskName || !taskDescription || !selectedDate || !taskType) return;
 
-    TasksCollection.insert({
+    Meteor.call('tasks.insert', {
       name: taskName.trim(),
       description: taskDescription.trim(),
       date: selectedDate,
       situation: 'Cadastrada',
-      userId: Meteor.user()._id,
-      userName: Meteor.user().username,
-      createdAt: new Date()
+      type: taskType
     });
 
     navigate('/tasks');
@@ -50,7 +56,7 @@ export const NewTask = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
+        sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
         Criar Nova Tarefa
       </Typography>
 
@@ -76,7 +82,7 @@ export const NewTask = () => {
         <DateTimePicker
           renderInput={(props) =>
             <TextField {...props}
-            sx = {{width: 400}}
+            sx = {{width: 400, marginBottom: '15px'}}
             required/>
           }
           label="Data"
@@ -85,6 +91,20 @@ export const NewTask = () => {
           onChange={handleDateChange}
         />
       </LocalizationProvider>
+
+      <Box sx={{ width: 400 }}>
+        <FormControl fullWidth>
+          <InputLabel required>Tipo</InputLabel>
+          <Select
+            value={taskType}
+            label="Tipo"
+            onChange={handleTypeChange}
+          >
+            <MenuItem value={"Pública"}>Pública</MenuItem>
+            <MenuItem value={"Pessoal"}>Pessoal</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
       <Box
         sx={{

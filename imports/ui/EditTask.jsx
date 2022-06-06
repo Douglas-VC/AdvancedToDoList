@@ -10,6 +10,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { buttonTheme } from './Welcome';
@@ -18,12 +21,15 @@ export const EditTask = () => {
   const navigate = useNavigate();
 
   const { state } = useLocation();
+
+  const handler = useTracker(() => Meteor.subscribe('tasks'));
   const task = useTracker(() => TasksCollection.find({_id : state.task._id}).fetch()[0]);
 
   const [disabledState, setDisabledState] = useState(true);
   const [taskName, setTaskName] = useState(task.name);
   const [taskDescription, setTaskDescription] = useState(task.description);
   const [selectedDate, handleDateChange] = useState(task.date);
+  const [taskType, setTaskType] = React.useState(task.type);
   const [errorMessage, setErrorMessage] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(null);
 
@@ -41,14 +47,13 @@ export const EditTask = () => {
 
     if (!taskName || !taskDescription) return;
 
-    TasksCollection.update(
-      {_id : task._id},
-      {$set:{
-        name : taskName,
-        description: taskDescription,
-        date: selectedDate
-      }}
-    );
+    Meteor.call('tasks.setTaskInfo', {
+      taskId: task._id,
+      name: taskName.trim(),
+      description: taskDescription.trim(),
+      date: selectedDate,
+      type: taskType
+    });
 
     setDisabledState(true);
   };
@@ -69,10 +74,12 @@ export const EditTask = () => {
     }
   };
 
+  const handleTypeChange = (e) => {
+    setTaskType(e.target.value);
+  };
+
   const handleRegisteredClick = () => {
-    TasksCollection.update(
-      {_id : task._id},{$set:{situation: 'Cadastrada'}}
-    );
+    Meteor.call('tasks.setSituation', task._id, "Cadastrada");
     setDisabledRegisteredButton(true);
     setDisabledOngoingButton(false);
     setDisabledConcludedButton(true);
@@ -80,9 +87,7 @@ export const EditTask = () => {
   };
 
   const handleOngoingClick = () => {
-    TasksCollection.update(
-      {_id : task._id},{$set:{situation: 'Em Andamento'}}
-    );
+    Meteor.call('tasks.setSituation', task._id, "Em Andamento");
     setDisabledRegisteredButton(false);
     setDisabledOngoingButton(true);
     setDisabledConcludedButton(false);
@@ -90,9 +95,7 @@ export const EditTask = () => {
   };
 
   const handleConcludedClick = () => {
-    TasksCollection.update(
-      {_id : task._id},{$set:{situation: 'Concluída'}}
-    );
+    Meteor.call('tasks.setSituation', task._id, "Concluída");
     setDisabledRegisteredButton(false);
     setDisabledOngoingButton(false);
     setDisabledConcludedButton(true);
@@ -110,7 +113,7 @@ export const EditTask = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
+        sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
         {disabledState ? 'Visualizar' : 'Editar'}: {task.name}
       </Typography>
 
@@ -206,6 +209,32 @@ export const EditTask = () => {
         </LocalizationProvider>
       </Box>
 
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "15px" }}>
+        <Typography
+          sx = {{
+            width: 140,
+            textAlign: "right" }}>
+          Tipo:
+        </Typography>
+
+        <FormControl>
+          <Select
+            value={taskType}
+            disabled={disabledState}
+            onChange={handleTypeChange}
+            sx = {{
+              width: 400,
+              marginLeft: 1,
+              marginRight: 18,
+              backgroundColor: disabledState ? '#bdbdbd' : 'white',
+              "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
+            }}
+          >
+            <MenuItem value={"Pública"}>Pública</MenuItem>
+            <MenuItem value={"Pessoal"}>Pessoal</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
 
       <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "15px" }}>
         <Typography
