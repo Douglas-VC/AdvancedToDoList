@@ -22,8 +22,8 @@ export const EditTask = () => {
 
   const { state } = useLocation();
 
-  const handler = useTracker(() => Meteor.subscribe('tasks'));
-  const task = useTracker(() => TasksCollection.find({_id : state.task._id}).fetch()[0]);
+  useTracker(() => Meteor.subscribe('tasks'));
+  const task = useTracker(() => TasksCollection.findOne({ _id: state.task._id }));
 
   const [disabledState, setDisabledState] = useState(true);
   const [taskName, setTaskName] = useState(task.name);
@@ -61,6 +61,8 @@ export const EditTask = () => {
   const handleCancel = () => {
     setTaskName(task.name);
     setTaskDescription(task.description);
+    setTaskType(task.type);
+    handleDateChange(task.date);
 
     setDisabledState(true);
   };

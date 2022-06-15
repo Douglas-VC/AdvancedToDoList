@@ -1,14 +1,18 @@
 import { Meteor } from 'meteor/meteor';
-import { Accounts } from 'meteor/accounts-base';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTracker } from 'meteor/react-meteor-data';
+import { ProfilesCollection } from '/imports/db/ProfilesCollection';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
+import Divider from '@mui/material/Divider';
+import Avatar from '@mui/material/Avatar';
 import MenuSharpIcon from '@mui/icons-material/MenuSharp';
 import IconButton from '@mui/material/IconButton';
 import HomeSharpIcon from '@mui/icons-material/HomeSharp';
@@ -18,6 +22,9 @@ import AssignmentSharpIcon from '@mui/icons-material/AssignmentSharp';
 export const AppDrawer = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const navigate = useNavigate();
+
+  const subscriptionHandler = useTracker(() => Meteor.subscribe('profiles'));
+  const profile = useTracker(() => ProfilesCollection.findOne({ userIdNumber: Meteor.userId() }));
 
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
@@ -49,8 +56,42 @@ export const AppDrawer = () => {
         open={openDrawer}
         onClose={handleDrawerClose}
         PaperProps={{
-          sx: { width: 200 }
+          sx: { width: 300}
         }}>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 2,
+            mb: 2
+          }}>
+          {subscriptionHandler.ready() ?
+            <>
+              <Avatar
+                src={profile.photo}
+                sx={{
+                  width: "100px",
+                  height: "100px",
+                }}>
+              </Avatar>
+              <Typography
+                variant="h4"
+                sx = {{ fontSize: "1rem", mt: 2, fontWeight: "bold"}}>
+                {profile.name}
+              </Typography>
+              <Typography
+                variant="h4"
+                sx = {{ fontSize: "0.8rem", mt: 0.5, fontWeight: "bold"}}>
+                {profile.email}
+              </Typography>
+            </> : <></>
+          }
+        </Box>
+
+        <Divider />
 
         <List>
           <ListItem disablePadding>
@@ -62,9 +103,7 @@ export const AppDrawer = () => {
               <ListItemText primary="Home" />
             </ListItemButton>
           </ListItem>
-        </List>
 
-        <List>
           <ListItem disablePadding>
             <ListItemButton
               onClick={userprofilePage}>
@@ -74,9 +113,7 @@ export const AppDrawer = () => {
               <ListItemText primary="Perfil" />
             </ListItemButton>
           </ListItem>
-        </List>
 
-        <List>
           <ListItem disablePadding>
             <ListItemButton
               onClick={tasksPage}>

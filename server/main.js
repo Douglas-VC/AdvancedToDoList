@@ -1,8 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { TasksCollection } from '/imports/db/TasksCollection';
+import { ProfilesCollection } from '/imports/db/ProfilesCollection';
 import '/imports/api/tasksMethods';
 import '/imports/api/tasksPublications';
+import '/imports/api/profilesMethods';
+import '/imports/api/profilesPublications';
 
 const insertTask = (taskName, taskDescription, user) =>
   TasksCollection.insert({
@@ -16,9 +19,25 @@ const insertTask = (taskName, taskDescription, user) =>
     createdAt: new Date(),
 });
 
+const insertProfile = (userId) =>
+  ProfilesCollection.insert({
+    userIdNumber: userId,
+    name: '',
+    email: '',
+    birthday: '',
+    gender: '',
+    company: '',
+    photo: ''
+});
+
 Meteor.methods({
   doesUserExist(name) {
     return Accounts.findUserByUsername(name) != null;
+  },
+
+  findIdByUsername(name) {
+    var user = Accounts.findUserByUsername(name);
+    return user._id;
   }
 });
 
@@ -45,5 +64,9 @@ Meteor.startup(() => {
     for (let i = 0; i < taskInformation.length; i++) {
       insertTask(taskInformation[i][0], taskInformation[i][1], user);
     }
+  }
+
+  if (ProfilesCollection.find().count() === 0) {
+    insertProfile(user._id);
   }
 });

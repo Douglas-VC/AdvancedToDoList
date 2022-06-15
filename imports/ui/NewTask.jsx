@@ -10,6 +10,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { buttonTheme } from './Welcome';
@@ -20,6 +22,8 @@ export const NewTask = () => {
   const [taskDescription, setTaskDescription] = useState("");
   const [selectedDate, handleDateChange] = useState(null);
   const [taskType, setTaskType] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showErrorMessage, setShowErrorMessage] = useState(null);
 
   const handleTypeChange = (e) => {
     setTaskType(e.target.value);
@@ -32,7 +36,11 @@ export const NewTask = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!taskName || !taskDescription || !selectedDate || !taskType) return;
+    if (!taskName || !taskDescription || !selectedDate || !taskType) {
+      setErrorMessage("Preencha todos os campos obrigatórios");
+      setShowErrorMessage(true);
+      return;
+    }
 
     Meteor.call('tasks.insert', {
       name: taskName.trim(),
@@ -59,6 +67,19 @@ export const NewTask = () => {
         sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
         Criar Nova Tarefa
       </Typography>
+
+      <Snackbar
+        open={showErrorMessage}
+        onClose={() => setShowErrorMessage(null)}
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical:"top", horizontal:"center"}}>
+        <Alert
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
 
       <TextField
         required

@@ -72,10 +72,17 @@ export const Tasks = () => {
         </Alert>
       </Snackbar>
 
-      <Box sx={{ mt: 1 }}>
+      <Box
+        sx={{
+          mt: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
+        }}>
         {!handler.ready() ?
-          <CircularProgress /> :
-          <List sx={{ maxHeight: 400, overflow: 'auto' }}>
+          <CircularProgress sx={{color: "black"}}/> :
+          <List sx={{ maxHeight: 500, overflow: "auto" }}>
             {tasks.map(task => (
               <Task
                 key={task._id}
@@ -85,23 +92,23 @@ export const Tasks = () => {
               />
             ))}
           </List>}
-      </Box>
 
-      <ThemeProvider theme={buttonTheme}>
-        <Button
-          type="button"
-          variant="contained"
-          sx = {{
-            mt: 3,
-            mb: 1,
-            fontWeight: "bold",
-            fontSize: "large"
-          }}
-          color="primary"
-          onClick={newTaskPage}>
-          +
-        </Button>
-      </ThemeProvider>
+          <ThemeProvider theme={buttonTheme}>
+            <Button
+              type="button"
+              variant="contained"
+              sx = {{
+                mt: 2,
+                mb: 1,
+                fontWeight: "bold",
+                fontSize: "large"
+              }}
+              color="primary"
+              onClick={newTaskPage}>
+              +
+            </Button>
+          </ThemeProvider>
+      </Box>
 
       <ThemeProvider theme={buttonTheme}>
         <Button

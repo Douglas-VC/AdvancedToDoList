@@ -39,14 +39,24 @@ export const SignUp = () => {
             username: username,
             password: password,
           });
-          navigate('/');
+
+          Meteor.call('findIdByUsername', username, function(error, result) {
+            if (!error) {
+              Meteor.call('profiles.insert', {
+                userId: result
+              });
+              navigate('/');
+            } else {
+              console.log("Error:", error);
+            }
+          });
         } else {
           setErrorMessage("Usuário já existe");
           setShowErrorMessage(true);
           return;
         }
-      } else{
-          console.log("Error:", error);
+      } else {
+        console.log("Error:", error);
       }
     });
   };
@@ -66,7 +76,7 @@ export const SignUp = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
+        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
         Criar Nova Conta
       </Typography>
 
