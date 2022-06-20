@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { TasksCollection } from '/imports/db/TasksCollection';
-import { ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -15,14 +14,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { buttonTheme } from './Welcome';
 
 export const EditTask = () => {
   const navigate = useNavigate();
 
   const { state } = useLocation();
 
-  useTracker(() => Meteor.subscribe('tasks'));
+  useTracker(() => Meteor.subscribe('tasks', Meteor.user().username));
   const task = useTracker(() => TasksCollection.findOne({ _id: state.task._id }));
 
   const [disabledState, setDisabledState] = useState(true);
@@ -283,61 +281,53 @@ export const EditTask = () => {
       <Box
         sx={{
           display: "flex",
-          position: "absolute",
-          bottom: 110,
+          mt: 5,
           justifyContent: "space-around"
         }}>
+        <Button
+          type="button"
+          variant="contained"
+          disabled={disabledRegisteredButton}
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "normal",
+            mr: 8,
+            ml: 8
+          }}
+          color="secondary"
+          onClick={handleRegisteredClick}>
+          Cadastrada
+        </Button>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            disabled={disabledRegisteredButton}
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "normal",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={handleRegisteredClick}>
-            Cadastrada
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          disabled={disabledOngoingButton}
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "normal",
+            mr: 8,
+            ml: 8
+          }}
+          color="secondary"
+          onClick={handleOngoingClick}>
+          Em Andamento
+        </Button>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            disabled={disabledOngoingButton}
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "normal",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={handleOngoingClick}>
-            Em Andamento
-          </Button>
-        </ThemeProvider>
-
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            disabled={disabledConcludedButton}
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "normal",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={handleConcludedClick}>
-            Concluída
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          disabled={disabledConcludedButton}
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "normal",
+            mr: 8,
+            ml: 8
+          }}
+          color="secondary"
+          onClick={handleConcludedClick}>
+          Concluída
+        </Button>
       </Box>
 
       <Box
@@ -348,37 +338,33 @@ export const EditTask = () => {
           justifyContent: "space-around"
         }}>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "large",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={disabledState ? tasksPage : handleCancel}>
-            {disabledState ? 'Voltar' : 'Cancelar'}
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={disabledState ? tasksPage : handleCancel}>
+          {disabledState ? 'Voltar' : 'Cancelar'}
+        </Button>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "large",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={disabledState ? handleEdit : handleSave}>
-            {disabledState ? 'Editar' : 'Salvar'}
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={disabledState ? handleEdit : handleSave}>
+          {disabledState ? 'Editar' : 'Salvar'}
+        </Button>
       </Box>
     </Box>
   );

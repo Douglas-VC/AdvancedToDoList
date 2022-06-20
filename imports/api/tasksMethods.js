@@ -36,7 +36,7 @@ Meteor.methods({
     TasksCollection.remove(taskId);
   },
 
-  'tasks.setTaskInfo'({ taskId, name, description, date }) {
+  'tasks.setTaskInfo'({ taskId, name, description, date, type }) {
     check(taskId, String);
     check(name, String);
     check(description, String);
@@ -51,6 +51,7 @@ Meteor.methods({
         name: name,
         description: description,
         date: date,
+        type: type
       }
     });
   },

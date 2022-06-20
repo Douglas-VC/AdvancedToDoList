@@ -2,14 +2,12 @@ import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { buttonTheme } from './Welcome';
 
 export const SignUp = () => {
   const [username, setUsername] = useState('');
@@ -127,37 +125,33 @@ export const SignUp = () => {
           justifyContent: "space-around"
         }}>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "large",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={handleCancelSignup}>
-            Cancelar
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={handleCancelSignup}>
+          Cancelar
+        </Button>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "large",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={handleSubmit}>
-            Criar Conta
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={handleSubmit}>
+          Criar Conta
+        </Button>
       </Box>
     </Box>
   );

@@ -3,29 +3,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTracker } from 'meteor/react-meteor-data';
 import { TasksCollection } from '/imports/db/TasksCollection';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import { grey } from '@mui/material/colors';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-
-export const buttonTheme = createTheme({
-  palette: {
-    primary: {
-      main: grey[400],
-    },
-  },
-});
+import CircularProgress from '@mui/material/CircularProgress';
 
 export const Welcome = () => {
   const navigate = useNavigate();
 
-  const handler = useTracker(() => Meteor.subscribe('tasks'));
-  const registeredTasksCount = useTracker(() => TasksCollection.find({}).count());
+  const subscriptionHandler = useTracker(() => Meteor.subscribe('tasks', Meteor.user().username));
+  const registeredTasksCount = useTracker(() => TasksCollection.find({ situation: "Cadastrada" }).count());
   const ongoingTasksCount = useTracker(() => TasksCollection.find({ situation: "Em Andamento" }).count());
   const concludedTasksCount = useTracker(() => TasksCollection.find({ situation: "Concluída" }).count());
 
@@ -88,8 +79,7 @@ export const Welcome = () => {
         <Card
           sx={{
           width: 150,
-          height: 150,
-          backgroundColor: "#bdbdbd"
+          height: 150
           }}>
           <CardContent>
             <Typography
@@ -99,23 +89,30 @@ export const Welcome = () => {
               }}>
               Total de Tarefas Cadastradas
             </Typography>
-            <Typography
-              sx={{
-                pt: 1,
-                pl: 2
-              }}
-              variant="h3"
-              component="div">
-              {registeredTasksCount}
-            </Typography>
+            {!subscriptionHandler.ready() ?
+              <CircularProgress
+                sx={{
+                  color: "white",
+                  mt: 2,
+                  ml: 1
+                }}/> :
+              <Typography
+                sx={{
+                  pt: 1,
+                  pl: 2
+                }}
+                variant="h3"
+                component="div">
+                {registeredTasksCount}
+              </Typography>
+            }
           </CardContent>
         </Card>
 
         <Card
           sx={{
           width: 150,
-          height: 150,
-          backgroundColor: "#bdbdbd"
+          height: 150
           }}>
           <CardContent>
             <Typography
@@ -125,15 +122,23 @@ export const Welcome = () => {
               }}>
               Total de Tarefas em Andamento
             </Typography>
-            <Typography
-              sx={{
-                pt: 1,
-                pl: 2
-              }}
-              variant="h3"
-              component="div">
-              {ongoingTasksCount}
-            </Typography>
+            {!subscriptionHandler.ready() ?
+              <CircularProgress
+                sx={{
+                  color: "white",
+                  mt: 2,
+                  ml: 1
+                }}/> :
+              <Typography
+                sx={{
+                  pt: 1,
+                  pl: 2
+                }}
+                variant="h3"
+                component="div">
+                {ongoingTasksCount}
+              </Typography>
+            }
           </CardContent>
         </Card>
       </Box>
@@ -152,8 +157,7 @@ export const Welcome = () => {
         <Card
           sx={{
           width: 150,
-          height: 150,
-          backgroundColor: "#bdbdbd"
+          height: 150
           }}>
           <CardContent>
             <Typography
@@ -163,34 +167,39 @@ export const Welcome = () => {
               }}>
               Total de Tarefas Concluídas
             </Typography>
-            <Typography
-              sx={{
-                pt: 1,
-                pl: 2
-              }}
-              variant="h3"
-              component="div">
-              {concludedTasksCount}
-            </Typography>
+            {!subscriptionHandler.ready() ?
+              <CircularProgress
+                sx={{
+                  color: "white",
+                  mt: 2,
+                  ml: 1
+                }}/> :
+              <Typography
+                sx={{
+                  pt: 1,
+                  pl: 2
+                }}
+                variant="h3"
+                component="div">
+                {concludedTasksCount}
+              </Typography>
+            }
           </CardContent>
         </Card>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              width: 150,
-              height: 150,
-              fontWeight: "bold",
-              fontSize: "large"
-            }}
-            color="primary"
-            onClick={tasksPage}>
-            Visualizar tarefas
-          </Button>
-        </ThemeProvider>
-
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            width: 150,
+            height: 150,
+            fontWeight: "bold",
+            fontSize: "large"
+          }}
+          color="primary"
+          onClick={tasksPage}>
+          Visualizar tarefas
+        </Button>
       </Box>
     </Box>
   );

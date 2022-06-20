@@ -2,7 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { ProfilesCollection } from '/imports/db/ProfilesCollection';
-import { ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -12,7 +11,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { buttonTheme } from './Welcome';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import AddAPhotoSharpIcon from '@mui/icons-material/AddAPhotoSharp';
@@ -101,16 +99,16 @@ export const UserProfile = () => {
         {!profilePhoto ?
           <Avatar
             sx={{
-              width: "100px",
-              height: "100px",
+              width: "120px",
+              height: "120px",
             }}>
             <AddAPhotoSharpIcon sx = {{ transform: "scale(1.6)" }}/>
           </Avatar> :
           <Avatar
             src={profilePhoto}
             sx={{
-              width: "100px",
-              height: "100px",
+              width: "120px",
+              height: "120px",
             }}>
           </Avatar>
         }
@@ -253,24 +251,6 @@ export const UserProfile = () => {
         }}>
 
         {disabledState? null :
-          <ThemeProvider theme={buttonTheme}>
-            <Button
-              type="button"
-              variant="contained"
-              sx = {{
-                fontWeight: "bold",
-                fontSize: "large",
-                mr: 8,
-                ml: 8
-              }}
-              color="primary"
-              onClick={handleCancel}>
-              Cancelar
-            </Button>
-          </ThemeProvider>
-        }
-
-        <ThemeProvider theme={buttonTheme}>
           <Button
             type="button"
             variant="contained"
@@ -281,13 +261,25 @@ export const UserProfile = () => {
               ml: 8
             }}
             color="primary"
-            onClick={disabledState ? handleEdit : handleSave}>
-            {disabledState ? 'Editar' : 'Salvar'}
+            onClick={handleCancel}>
+            Cancelar
           </Button>
-        </ThemeProvider>
+        }
+
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={disabledState ? handleEdit : handleSave}>
+          {disabledState ? 'Editar' : 'Salvar'}
+        </Button>
       </Box>
-
-
     </Box>
   );
 };

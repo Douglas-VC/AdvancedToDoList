@@ -7,7 +7,6 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import { grey } from '@mui/material/colors';
 
 export const LoginForm = () => {
   const [username, setUsername] = useState('');
@@ -71,7 +70,7 @@ export const LoginForm = () => {
         variant="outlined"
         label="Usuário"
         sx = {{ mt: 2 }}
-        onChange={(e) => setUsername(e.target.value)}>
+        onChange={(e) => setUsername(e.target.value.trim())}>
       </TextField>
 
       <TextField
@@ -87,8 +86,6 @@ export const LoginForm = () => {
         type="submit"
         variant="contained"
         sx = {{
-          backgroundColor: grey[900],
-          "&:hover": { backgroundColor: grey[900] },
           mt: 3,
           width: 150 }}
         color="primary">

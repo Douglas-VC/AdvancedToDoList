@@ -1,7 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -14,7 +13,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { buttonTheme } from './Welcome';
 
 export const NewTask = () => {
   const navigate = useNavigate();
@@ -135,37 +133,33 @@ export const NewTask = () => {
           justifyContent: "space-around"
         }}>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "large",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={tasksPage}>
-            Cancelar
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={tasksPage}>
+          Cancelar
+        </Button>
 
-        <ThemeProvider theme={buttonTheme}>
-          <Button
-            type="button"
-            variant="contained"
-            sx = {{
-              fontWeight: "bold",
-              fontSize: "large",
-              mr: 8,
-              ml: 8
-            }}
-            color="primary"
-            onClick={handleSubmit}>
-            Cadastrar
-          </Button>
-        </ThemeProvider>
+        <Button
+          type="button"
+          variant="contained"
+          sx = {{
+            fontWeight: "bold",
+            fontSize: "large",
+            mr: 8,
+            ml: 8
+          }}
+          color="primary"
+          onClick={handleSubmit}>
+          Cadastrar
+        </Button>
       </Box>
     </Box>
   );

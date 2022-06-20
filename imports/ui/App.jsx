@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useTracker } from 'meteor/react-meteor-data';
 import { LoginForm } from './LoginForm';
@@ -17,16 +17,18 @@ export const App = () => {
   const navigate = useNavigate();
 
   const RequireAuth = ({ children }) => {
+    useEffect(() => {
+      if (!user) {
+        navigate('/')
+      }
+    }, [user, navigate]);
 
-    return !user ? (
-      console.log("You need to log in!"),
-      navigate('/')
-    ) : (
+    return (
       <>
         <AppDrawer />
         {children}
       </>
-    );
+    )
   }
 
   return (
