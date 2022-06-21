@@ -1,8 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTracker } from 'meteor/react-meteor-data';
-import { TasksCollection } from '/imports/db/TasksCollection';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -20,14 +18,14 @@ export const EditTask = () => {
 
   const { state } = useLocation();
 
-  useTracker(() => Meteor.subscribe('tasks', Meteor.user().username));
-  const task = useTracker(() => TasksCollection.findOne({ _id: state.task._id }));
+  const task = state.task;
 
   const [disabledState, setDisabledState] = useState(true);
   const [taskName, setTaskName] = useState(task.name);
   const [taskDescription, setTaskDescription] = useState(task.description);
   const [selectedDate, handleDateChange] = useState(task.date);
   const [taskType, setTaskType] = React.useState(task.type);
+  const [taskSituation, setTaskSituation] = React.useState(task.situation);
   const [errorMessage, setErrorMessage] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(null);
 
@@ -80,6 +78,7 @@ export const EditTask = () => {
 
   const handleRegisteredClick = () => {
     Meteor.call('tasks.setSituation', task._id, "Cadastrada");
+    setTaskSituation("Cadastrada");
     setDisabledRegisteredButton(true);
     setDisabledOngoingButton(false);
     setDisabledConcludedButton(true);
@@ -88,6 +87,7 @@ export const EditTask = () => {
 
   const handleOngoingClick = () => {
     Meteor.call('tasks.setSituation', task._id, "Em Andamento");
+    setTaskSituation("Em Andamento");
     setDisabledRegisteredButton(false);
     setDisabledOngoingButton(true);
     setDisabledConcludedButton(false);
@@ -96,11 +96,25 @@ export const EditTask = () => {
 
   const handleConcludedClick = () => {
     Meteor.call('tasks.setSituation', task._id, "Concluída");
+    setTaskSituation("Concluída");
     setDisabledRegisteredButton(false);
     setDisabledOngoingButton(false);
     setDisabledConcludedButton(true);
     return;
   };
+
+  const textFieldStyle = {
+    width: 400,
+    marginLeft: 1,
+    marginRight: 18,
+    backgroundColor: "white",
+    "& .MuiInputBase-root.Mui-disabled": {
+      backgroundColor: "#bdbdbd"
+    },
+    "& .MuiSelect-select.Mui-disabled": {
+      backgroundColor: "#bdbdbd"
+    }
+  }
 
   return (
     <Box
@@ -113,7 +127,7 @@ export const EditTask = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
+        sx = {{ mt: 2, mb: 4}}>
         {disabledState ? 'Visualizar' : 'Editar'}: {task.name}
       </Typography>
 
@@ -124,8 +138,7 @@ export const EditTask = () => {
         anchorOrigin={{ vertical:"top", horizontal:"center"}}>
         <Alert
           severity="error"
-          variant="filled"
-          sx={{ width: '100%' }}>
+          variant="filled">
           {errorMessage}
         </Alert>
       </Snackbar>
@@ -142,15 +155,9 @@ export const EditTask = () => {
           required
           disabled={disabledState}
           variant="outlined"
+          sx={textFieldStyle}
           value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-          sx = {{
-            width: 400,
-            marginLeft: 1,
-            marginRight: 18,
-            backgroundColor: disabledState ? '#bdbdbd' : 'white',
-            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
-          }}>
+          onChange={(e) => setTaskName(e.target.value)}>
         </TextField>
       </Box>
 
@@ -170,13 +177,7 @@ export const EditTask = () => {
           variant="outlined"
           value={taskDescription}
           onChange={(e) => setTaskDescription(e.target.value)}
-          sx = {{
-            width: 400,
-            marginLeft: 1,
-            marginRight: 18,
-            backgroundColor: disabledState ? '#bdbdbd' : 'white',
-            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
-          }}>
+          sx = {textFieldStyle}>
         </TextField>
       </Box>
 
@@ -192,13 +193,7 @@ export const EditTask = () => {
           <DateTimePicker
             renderInput={(props) =>
               <TextField {...props}
-              sx = {{
-                width: 400,
-                marginLeft: 1,
-                marginRight: 18,
-                backgroundColor: disabledState ? '#bdbdbd' : 'white',
-                "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
-              }}
+              sx = {textFieldStyle}
               required/>
             }
             value={selectedDate}
@@ -222,13 +217,7 @@ export const EditTask = () => {
             value={taskType}
             disabled={disabledState}
             onChange={handleTypeChange}
-            sx = {{
-              width: 400,
-              marginLeft: 1,
-              marginRight: 18,
-              backgroundColor: disabledState ? '#bdbdbd' : 'white',
-              "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
-            }}
+            sx = {textFieldStyle}
           >
             <MenuItem value={"Pública"}>Pública</MenuItem>
             <MenuItem value={"Pessoal"}>Pessoal</MenuItem>
@@ -248,13 +237,7 @@ export const EditTask = () => {
           disabled
           variant="outlined"
           value={task.userName}
-          sx = {{
-            width: 400,
-            marginLeft: 1,
-            marginRight: 18,
-            backgroundColor: '#bdbdbd',
-            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
-          }}>
+          sx = {textFieldStyle}>
         </TextField>
       </Box>
 
@@ -267,14 +250,8 @@ export const EditTask = () => {
         <TextField
           disabled
           variant="outlined"
-          value={task.situation}
-          sx = {{
-            width: 400,
-            marginLeft: 1,
-            marginRight: 18,
-            backgroundColor: '#bdbdbd',
-            "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "black" }
-          }}>
+          value={taskSituation}
+          sx = {textFieldStyle}>
         </TextField>
       </Box>
 
@@ -282,18 +259,13 @@ export const EditTask = () => {
         sx={{
           display: "flex",
           mt: 5,
-          justifyContent: "space-around"
+          justifyContent: "space-around",
+          columnGap: 10
         }}>
         <Button
           type="button"
           variant="contained"
           disabled={disabledRegisteredButton}
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "normal",
-            mr: 8,
-            ml: 8
-          }}
           color="secondary"
           onClick={handleRegisteredClick}>
           Cadastrada
@@ -303,12 +275,6 @@ export const EditTask = () => {
           type="button"
           variant="contained"
           disabled={disabledOngoingButton}
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "normal",
-            mr: 8,
-            ml: 8
-          }}
           color="secondary"
           onClick={handleOngoingClick}>
           Em Andamento
@@ -318,12 +284,6 @@ export const EditTask = () => {
           type="button"
           variant="contained"
           disabled={disabledConcludedButton}
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "normal",
-            mr: 8,
-            ml: 8
-          }}
           color="secondary"
           onClick={handleConcludedClick}>
           Concluída
@@ -334,19 +294,15 @@ export const EditTask = () => {
         sx={{
           display: "flex",
           position: "absolute",
-          bottom: 40,
-          justifyContent: "space-around"
+          justifyContent: "space-around",
+          columnGap: 10,
+          rowGap: 2,
+          bottom: 40
         }}>
 
         <Button
           type="button"
           variant="contained"
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "large",
-            mr: 8,
-            ml: 8
-          }}
           color="primary"
           onClick={disabledState ? tasksPage : handleCancel}>
           {disabledState ? 'Voltar' : 'Cancelar'}
@@ -355,12 +311,6 @@ export const EditTask = () => {
         <Button
           type="button"
           variant="contained"
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "large",
-            mr: 8,
-            ml: 8
-          }}
           color="primary"
           onClick={disabledState ? handleEdit : handleSave}>
           {disabledState ? 'Editar' : 'Salvar'}

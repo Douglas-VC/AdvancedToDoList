@@ -1,12 +1,12 @@
-body {
-  padding: 10px;
-  font-family: sans-serif;
+body,html {
+  margin: 0;
+  padding: 0;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: 100vh;
 
   justify-content: center;
   align-items: center;

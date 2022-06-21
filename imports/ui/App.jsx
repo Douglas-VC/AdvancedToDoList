@@ -18,7 +18,7 @@ export const App = () => {
 
   const RequireAuth = ({ children }) => {
     useEffect(() => {
-      if (!user) {
+      if (!user && !Meteor.loggingIn()) {
         navigate('/')
       }
     }, [user, navigate]);
@@ -36,9 +36,8 @@ export const App = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        flex: 1,
-        overflow: "auto",
-        background: "white" }}>
+        background: "white"
+      }}>
       <Routes>
         <Route
           path="/"

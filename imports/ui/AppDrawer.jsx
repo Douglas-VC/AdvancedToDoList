@@ -20,8 +20,8 @@ import AccountBoxSharpIcon from '@mui/icons-material/AccountBoxSharp';
 import AssignmentSharpIcon from '@mui/icons-material/AssignmentSharp';
 
 export const AppDrawer = () => {
-  const [openDrawer, setOpenDrawer] = useState(false);
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = useState(false);
 
   const subscriptionHandler = useTracker(() => Meteor.subscribe('profiles'));
   const profile = useTracker(() => ProfilesCollection.findOne({ userIdNumber: Meteor.userId() }));
@@ -47,7 +47,7 @@ export const AppDrawer = () => {
   }
 
   return (
-    <Box sx={{ mr: "auto" }}>
+    <Box sx={{ mr: "auto", mt: 2, ml: 2 }}>
       <IconButton onClick={handleDrawerOpen} onClose={handleDrawerClose}>
         <MenuSharpIcon />
       </IconButton>
@@ -56,7 +56,7 @@ export const AppDrawer = () => {
         open={openDrawer}
         onClose={handleDrawerClose}
         PaperProps={{
-          sx: { width: 300}
+          sx: { width: 300 }
         }}>
 
         <Box
@@ -79,12 +79,12 @@ export const AppDrawer = () => {
               </Avatar>
               <Typography
                 variant="h4"
-                sx = {{ fontSize: "1rem", mt: 2, fontWeight: "bold"}}>
+                sx = {{ fontSize: "1rem", mt: 2}}>
                 {profile.name}
               </Typography>
               <Typography
                 variant="h4"
-                sx = {{ fontSize: "0.8rem", mt: 0.5, fontWeight: "bold"}}>
+                sx = {{ fontSize: "0.8rem", mt: 0.5}}>
                 {profile.email}
               </Typography>
             </> : <></>
@@ -124,7 +124,6 @@ export const AppDrawer = () => {
             </ListItemButton>
           </ListItem>
         </List>
-
       </Drawer>
     </Box>
   );

@@ -68,13 +68,13 @@ export const SignUp = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        height: "100vh",
         alignItems: "center"
       }}>
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 8, mb: 4, fontWeight: "bold"}}>
+        sx = {{ mt: 8 }}>
         Criar Nova Conta
       </Typography>
 
@@ -85,8 +85,7 @@ export const SignUp = () => {
         anchorOrigin={{ vertical:"top", horizontal:"center"}}>
         <Alert
           severity="error"
-          variant="filled"
-          sx={{ width: '100%' }}>
+          variant="filled">
           {errorMessage}
         </Alert>
       </Snackbar>
@@ -96,7 +95,7 @@ export const SignUp = () => {
         variant="outlined"
         label="Usuário"
         onChange={(e) => setUsername(e.target.value)}
-        style = {{ marginBottom: '15px', marginTop: "100px" }}>
+        sx={{ mt: "auto" }}>
       </TextField>
 
       <TextField
@@ -105,7 +104,7 @@ export const SignUp = () => {
         type="password"
         label="Senha"
         onChange={(e) => setPassword(e.target.value)}
-        style = {{marginBottom: '15px'}}>
+        sx = {{ mt: 2 }}>
       </TextField>
 
       <TextField
@@ -114,26 +113,23 @@ export const SignUp = () => {
         type="password"
         label="Confirmar Senha"
         onChange={(e) => setConfirmPassword(e.target.value)}
-        style = {{marginBottom: '15px'}}>
+        sx = {{ mt: 2}}>
       </TextField>
 
       <Box
         sx={{
           display: "flex",
-          position: "absolute",
-          bottom: 40,
-          justifyContent: "space-around"
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+          columnGap: 6,
+          rowGap: 2,
+          mt: "auto",
+          mb: 4
         }}>
 
         <Button
           type="button"
           variant="contained"
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "large",
-            mr: 8,
-            ml: 8
-          }}
           color="primary"
           onClick={handleCancelSignup}>
           Cancelar
@@ -142,12 +138,6 @@ export const SignUp = () => {
         <Button
           type="button"
           variant="contained"
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "large",
-            mr: 8,
-            ml: 8
-          }}
           color="primary"
           onClick={handleSubmit}>
           Criar Conta

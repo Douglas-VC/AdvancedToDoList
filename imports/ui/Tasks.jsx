@@ -27,7 +27,8 @@ export const Tasks = () => {
   const [page, setPage] = React.useState(1);
   const [searchField, setSearchField] = useState('');
 
-  const subscriptionHandler = useTracker(() => Meteor.subscribe('tasks', Meteor.user().username));
+  const currentUser = useTracker(() => Meteor.user())
+  const subscriptionHandler = useTracker(() => Meteor.subscribe('tasks', currentUser ? currentUser.username : ""));
   const tasks = useTracker(() => TasksCollection.find(searchField ? { name: { $regex: searchField, $options : 'i' } } : taskCheckbox ? {} : { situation: { $ne: "Concluída" } }, { skip: (page-1)*4, limit: 4 }).fetch());
   const tasksCount = useTracker(() => TasksCollection.find(searchField ? { name: { $regex: searchField, $options : 'i' } } : taskCheckbox ? {} : { situation: { $ne: "Concluída" } }).count());
 
@@ -72,7 +73,7 @@ export const Tasks = () => {
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 2, fontWeight: "bold"}}>
+        sx = {{ mt: 2 }}>
         Tarefas Cadastradas
       </Typography>
 
@@ -83,12 +84,6 @@ export const Tasks = () => {
           <Checkbox
             defaultChecked
             onChange={handleCheckbox}
-            sx={{
-              color: "black",
-              '&.Mui-checked': {
-                color: "black"
-              }
-            }}
           />
         }
       />
@@ -100,8 +95,7 @@ export const Tasks = () => {
         anchorOrigin={{ vertical:"top", horizontal:"center"}}>
         <Alert
           severity="error"
-          variant="filled"
-          sx={{ width: '100%' }}>
+          variant="filled">
           {errorMessage}
         </Alert>
       </Snackbar>
@@ -126,9 +120,7 @@ export const Tasks = () => {
             <InputAdornment
               position="end">
                 <SearchSharpIcon
-                  sx={{
-                    color: "#bdbdbd"
-                  }}
+                  sx={{ color: "#bdbdbd" }}
                 />
             </InputAdornment>
         }}>
@@ -142,9 +134,10 @@ export const Tasks = () => {
           justifyContent: "center",
           alignItems: "center"
         }}>
+
         {!subscriptionHandler.ready() ?
           <CircularProgress sx={{ color: "black" }}/> :
-          <List sx={{ minHeight: "385px" }}>
+          <List sx={{ minHeight: "435px" }}>
             {tasks.map(task => (
               <Task
                 key={task._id}
@@ -156,7 +149,7 @@ export const Tasks = () => {
           </List>}
 
           <Pagination
-            sx={{ mt: 2}}
+            sx={{ mt: 1 }}
             shape="rounded"
             variant="outlined"
             showFirstButton
@@ -170,12 +163,7 @@ export const Tasks = () => {
           <Button
             type="button"
             variant="contained"
-            sx = {{
-              mt: 2,
-              mb: 1,
-              fontWeight: "bold",
-              fontSize: "large"
-            }}
+            sx = {{ mt: 2, mb: 1 }}
             color="primary"
             onClick={newTaskPage}>
             +
@@ -187,8 +175,6 @@ export const Tasks = () => {
         variant="contained"
         sx = {{
           width: 150,
-          fontWeight: "bold",
-          fontSize: "large",
           position: "fixed",
           bottom: 40,
           left: 40

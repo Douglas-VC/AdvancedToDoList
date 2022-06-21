@@ -1,8 +1,6 @@
 import React from 'react';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import IconButton from '@mui/material/IconButton';
 import AssignmentSharpIcon from '@mui/icons-material/AssignmentSharp';
 import DeleteSharpIcon from '@mui/icons-material/DeleteSharp';
@@ -29,11 +27,7 @@ export const Task = ({ task, onDeleteClick, onEditClick }) => {
           flexDirection: "column"
         }}>
         <Typography
-          variant="h4"
-          sx = {{
-            fontSize: "1rem",
-            color: "black"
-          }}>
+          variant="h5">
             {(task.name.length > 30) ? task.name.substr(0, 30-1) + '...' : task.name}
         </Typography>
 
@@ -48,20 +42,16 @@ export const Task = ({ task, onDeleteClick, onEditClick }) => {
           }}>
 
           <Typography
-            variant="h4"
             sx = {{
-              fontSize: "0.9rem",
-              color: "#616161"
+              fontSize: "0.9rem"
             }}>
               {"Data: " + task.date.toLocaleString()}
           </Typography>
 
           <Typography
-            variant="h4"
             sx = {{
               width: "170px",
-              fontSize: "0.9rem",
-              color: "#616161"
+              fontSize: "0.9rem"
             }}>
               {"Situação: " + task.situation}
           </Typography>
@@ -69,10 +59,8 @@ export const Task = ({ task, onDeleteClick, onEditClick }) => {
         </Box>
 
         <Typography
-          variant="h4"
           sx = {{
             fontSize: "0.9rem",
-            color: "#616161",
             mt: 1
           }}>
             {"Criador: " + task.userName}

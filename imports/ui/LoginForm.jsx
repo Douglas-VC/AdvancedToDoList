@@ -9,32 +9,32 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 export const LoginForm = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const [showErrorMessage, setShowErrorMessage] = useState(null);
-  const navigate = useNavigate();
 
-  const submit = e => {
+  const submitLoginForm = e => {
     e.preventDefault();
 
     Meteor.loginWithPassword(username, password, function (err) {
       if (!err) {
-          console.log("User logged in: " + Meteor.user());
-          console.log("User logged in: " + Meteor.user().username);
-          navigate('/welcome');
-      } else{
-          console.log(err.reason);
-          switch (err.reason) {
-            case 'User not found':
-              setErrorMessage("Usuário não encontrado");
-              setShowErrorMessage(true);
-              break;
-            case 'Incorrect password':
-              setErrorMessage("Senha incorreta");
-              setShowErrorMessage(true);
-              break;
-          }
+        console.log("User logged in: " + Meteor.user());
+        console.log("User logged in: " + Meteor.user().username);
+        navigate('/welcome');
+      } else {
+        console.log(err.reason);
+        switch (err.reason) {
+          case 'User not found':
+            setErrorMessage("Usuário não encontrado");
+            setShowErrorMessage(true);
+            break;
+          case 'Incorrect password':
+            setErrorMessage("Senha incorreta");
+            setShowErrorMessage(true);
+            break;
+        }
       }
     });
   };
@@ -44,10 +44,9 @@ export const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={submit} className="login-form">
+    <form onSubmit={submitLoginForm} className="login-form">
       <Typography
-        variant="h4"
-        sx = {{ fontSize: "1.8rem", margin: 1, fontWeight: "bold"}}>
+        variant="h3">
         Bem vindo ao ToDo List
       </Typography>
 
@@ -58,8 +57,7 @@ export const LoginForm = () => {
         anchorOrigin={{ vertical:"top", horizontal:"center"}}>
         <Alert
           severity="error"
-          variant="filled"
-          sx={{ width: '100%' }}>
+          variant="filled">
           {errorMessage}
         </Alert>
       </Snackbar>
@@ -69,7 +67,7 @@ export const LoginForm = () => {
         type="text"
         variant="outlined"
         label="Usuário"
-        sx = {{ mt: 2 }}
+        sx = {{ mt: 4 }}
         onChange={(e) => setUsername(e.target.value.trim())}>
       </TextField>
 
@@ -87,7 +85,8 @@ export const LoginForm = () => {
         variant="contained"
         sx = {{
           mt: 3,
-          width: 150 }}
+          width: 150
+        }}
         color="primary">
         Entrar
       </Button>
@@ -96,11 +95,7 @@ export const LoginForm = () => {
         type="button"
         variant="subtitle1"
         underline="hover"
-        sx = {{
-          color: "black",
-          mt: 1,
-          '&:hover': { cursor: 'pointer' }
-        }}
+        sx = {{ mt: 1 }}
         onClick={signupPage}>
         Cadastrar
       </Link>

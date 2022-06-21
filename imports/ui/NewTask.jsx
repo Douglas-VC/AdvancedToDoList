@@ -57,12 +57,13 @@ export const NewTask = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        height: "90vh"
       }}>
 
       <Typography
         variant="h4"
-        sx = {{ fontSize: "1.6rem", mt: 2, mb: 4, fontWeight: "bold"}}>
+        sx = {{ mt: 2, mb: 4}}>
         Criar Nova Tarefa
       </Typography>
 
@@ -73,8 +74,7 @@ export const NewTask = () => {
         anchorOrigin={{ vertical:"top", horizontal:"center"}}>
         <Alert
           severity="error"
-          variant="filled"
-          sx={{ width: '100%' }}>
+          variant="filled">
           {errorMessage}
         </Alert>
       </Snackbar>
@@ -84,7 +84,7 @@ export const NewTask = () => {
         variant="outlined"
         label="Nome da Tarefa"
         onChange={(e) => setTaskName(e.target.value)}
-        style = {{width: 400, marginBottom: '15px'}}>
+        sx = {{width: 400, mb: '15px', mt: "auto"}}>
       </TextField>
 
       <TextField
@@ -94,14 +94,14 @@ export const NewTask = () => {
         variant="outlined"
         label="Descrição"
         onChange={(e) => setTaskDescription(e.target.value)}
-        style = {{width: 400, marginBottom: '15px'}}>
+        sx = {{width: 400, mb: '15px'}}>
       </TextField>
 
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateTimePicker
           renderInput={(props) =>
             <TextField {...props}
-            sx = {{width: 400, marginBottom: '15px'}}
+            sx = {{width: 400, mb: '15px'}}
             required/>
           }
           label="Data"
@@ -111,7 +111,7 @@ export const NewTask = () => {
         />
       </LocalizationProvider>
 
-      <Box sx={{ width: 400 }}>
+      <Box sx={{ width: 400, mb: "auto" }}>
         <FormControl fullWidth>
           <InputLabel required>Tipo</InputLabel>
           <Select
@@ -128,20 +128,15 @@ export const NewTask = () => {
       <Box
         sx={{
           display: "flex",
-          position: "absolute",
-          bottom: 40,
-          justifyContent: "space-around"
+          justifyContent: "space-around",
+          mt: "auto",
+          columnGap: 10,
+          rowGap: 2,
         }}>
 
         <Button
           type="button"
           variant="contained"
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "large",
-            mr: 8,
-            ml: 8
-          }}
           color="primary"
           onClick={tasksPage}>
           Cancelar
@@ -150,12 +145,6 @@ export const NewTask = () => {
         <Button
           type="button"
           variant="contained"
-          sx = {{
-            fontWeight: "bold",
-            fontSize: "large",
-            mr: 8,
-            ml: 8
-          }}
           color="primary"
           onClick={handleSubmit}>
           Cadastrar

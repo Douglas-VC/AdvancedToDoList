@@ -12,6 +12,7 @@ export const MainTheme = createTheme({
           backgroundSize: "200% auto",
           color: "white",
           fontWeight: "bold",
+          fontSize: "large",
           boxShadow: "0 0 20px #eee",
           borderRadius: "15px",
           display: "block",
@@ -21,6 +22,8 @@ export const MainTheme = createTheme({
           }
         },
         containedSecondary: {
+          fontWeight: "bold",
+          fontSize: "normal",
           backgroundColor: "black",
           color: "white",
           '&:hover': {
@@ -29,6 +32,7 @@ export const MainTheme = createTheme({
         }
       },
     },
+
     MuiCard: {
       styleOverrides: {
         root: {
@@ -39,6 +43,57 @@ export const MainTheme = createTheme({
           boxShadow: "0 0 20px #eee",
           borderRadius: "15px",
           display: "block"
+        }
+      },
+    },
+
+    MuiTypography: {
+      styleOverrides: {
+        h2: {
+          fontSize: "3rem"
+        },
+
+        h3: {
+          fontSize: "1.8rem",
+          fontWeight: "bold"
+        },
+
+        h4: {
+          fontSize: "1.6rem",
+          fontWeight: "bold"
+        },
+
+        h5: {
+          fontSize: "1.2rem"
+        },
+
+        h6: {
+          fontSize: "0.9rem"
+        }
+      },
+    },
+
+    MuiLink: {
+      styleOverrides: {
+        underlineHover: {
+          color: "black",
+          '&:hover': { cursor: 'pointer' }
+        },
+        underlineNone: {
+          color: "black",
+          fontWeight: "bold",
+          '&:hover': { cursor: 'pointer' }
+        }
+      },
+    },
+
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "black",
+          '&.Mui-checked': {
+            color: "black"
+          }
         }
       },
     },
